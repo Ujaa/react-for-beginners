@@ -205,3 +205,69 @@ const Container = () => (
 
 ReactDOM.createRoot(root).render(<Container />);
 ```
+
+## **Understanding State**
+
+데이터가 업데이트되면 UI를 새로 render해야 한다. 때문에 아래 코드에서 데이터를 변경한 이후에 render 함수를 호출하는 것이다. render가 호출되면 react.js는 새로 랜더링을 할 때 이전에 랜더링된 컴포넌트와 앞으로 랜더링할 컴포넌트를 비교하여 변경되는 부분만 새롭게 바꾼다.
+
+```jsx
+const root = document.getElementById("root");
+
+let counter = 0;
+
+function countUp() {
+	counter++;
+	render();
+}
+
+function render() {
+	ReactDOM.createRoot(root).render(<Container />);
+}
+
+const Container = () => (
+	<div>
+		<h1>Counter 😀</h1>
+		<span>누른 횟수는? {counter}회</span>
+		<button onClick={countUp}>눌러줘</button>
+	</div>
+);
+
+render();
+```
+
+## **setState part One**
+
+React에서 데이터를 사용하면서 데이터가 변경될 때 UI를 자동으로 render하는 방법은 데이터를 useState를 이용해서 생성하고 업데이트 하는 것이다.
+
+```jsx
+const data = React.useState(); // data = [undefined, f]
+```
+
+```jsx
+// 첫 번째 값은 데이터, 두 번째 값은 데이터를 업데이트할 때 사용하는 함수
+const [counter, setCounter] = React.useState();
+```
+
+## **setState part Two**
+
+modifier를 사용해서 데이터를 업데이트하면 데이터의 값이 변경된 후 자동으로 render한다.
+
+```jsx
+let [counter, setCounter] = React.useState(0);
+
+const countUp = () => {
+	setCounter(counter + 1);
+};
+```
+
+## State Functions
+
+modifier를 이용해 state를 바꿀 수 있다. 만약 state를 완전히 새로운 값으로 바꾸고 싶다면 새로운 값을 modifier에 인자로 넣어주면 된다. 만약 state를 이전 값을 이용해서 새로운 값으로 만들고 싶다면 modifier에 함수를 넣어서 이전 값을 함수의 파라미터로 받으면 된다.
+
+```jsx
+setCounter(123);
+```
+
+```jsx
+setCounter((current) => current + 1);
+```
