@@ -271,3 +271,75 @@ setCounter(123);
 ```jsx
 setCounter((current) => current + 1);
 ```
+
+## **PROPS**
+
+컴포넌트는 JSX를 return을 함수기 때문에, 코드를 함수로 함수로 만들어 컴포넌트로 분리할 수 있다. 그리고 부모 컴포넌트에서 자식 컴포넌트로 정보를 보낼 때 props를 사용한다.
+
+props는 object 형태로 컴포넌트의 첫 번째 인자로 전달된다.
+
+```jsx
+function SaveBtn(props) {
+	return <button>{props.btnText}</button>;
+}
+```
+
+```jsx
+function App() {
+	return (
+		<div>
+			<SaveBtn btnText="banana" />
+			<SaveBtn btnText="apple" />
+		</div>
+	);
+}
+```
+
+그리고 JavaScript는 객체 구조 분해를 사용해서 object의 속성 값을 분해해 바로 사용할 수 있다.
+
+```jsx
+function SaveBtn({btnText}) {
+	return <button>{btnText}</button>;
+}
+```
+
+## **Memo**
+
+react는 부모 컴포넌트의 state가 변경되면 모든 자식 컴포넌트가 re-render 된다. 그래서 사실상 변경되는 자식 컴포넌트가 하나여도 모든 컴포넌트를 re-render하기 때문에 애플리케이션이 느려질 수 있다. 이 때 memo를 사용할 수 있다. memo에 react가 기억했으면 하는 컴포넌트 함수를 인자로 넘기면, 해당 컴포넌트 props가 변경될 때만 re-render한다.
+
+```jsx
+function Btn({ btnText, onClick }) {
+	return <button onClick={onClick}>{btnText}</button>;
+}
+
+const MemorizedBtn = React.memo(Btn);
+
+function App() {
+	const [value, setValue] = React.useState("banana");
+	const onClick = () => {
+		setValue("new banana!");
+	};
+	
+	return (
+		<div>
+			<MemorizedBtn btnText={value} onClick={onClick} />
+			<MemorizedBtn btnText="apple" />
+		</div>
+	);
+}
+```
+
+## **Prop Types**
+
+PropType를 사용하면 prop를 어떤 타입의 데이터로 전달해야 하는지, required인지 등등 prop 전달에 대한 부가 정보를 전달할 수 있다.
+
+```jsx
+function Btn({ btnText, onClick }) {
+	return <button onClick={onClick}>{btnText}</button>;
+}
+
+Btn.propTypes = {
+	btnText: PropTypes.string.isRequired,
+	onClick: PropTypes.func,
+};
+```
